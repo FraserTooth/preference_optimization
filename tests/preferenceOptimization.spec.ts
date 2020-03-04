@@ -20,21 +20,26 @@ describe("Preference Scoring", () => {
 
     const output = preferenceScorer(input.companies, input.clients);
 
+    /*
+      For no match: 0
+      For preference order match: (choices.length - 1)
+      For two way match (preferenceOrderClient + prederenceOrderCompany)
+    */
     const expected = {
       companyA: {
-        clientA: 2,
+        clientA: 4,
         clientB: 1,
         clientC: 1
       },
       companyB: {
-        clientA: 2,
-        clientB: 2,
+        clientA: 3,
+        clientB: 3,
         clientC: 0
       },
       companyC: {
-        clientA: 1,
+        clientA: 2,
         clientB: 2,
-        clientC: 1
+        clientC: 2
       }
     };
 

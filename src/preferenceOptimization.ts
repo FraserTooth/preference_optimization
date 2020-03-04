@@ -29,8 +29,18 @@ export const preferenceScorer = (dogs: Choices, cats: Choices) => {
         if (cats.hasOwnProperty(cat)) {
           const catsChoices = cats[cat];
 
+          //Initialise Score
+          if (!output[dog][cat]) {
+            output[dog][cat] = 0;
+          }
+
+          const catsDogChoiceScore =
+            catsChoices.indexOf(dog) != -1
+              ? catsChoices.length - catsChoices.indexOf(dog)
+              : 0;
+
           //Add Standard Score for Cats with Current Dog or Set to Zero
-          output[dog][cat] = catsChoices.includes(dog) ? 1 : 0;
+          output[dog][cat] += catsDogChoiceScore;
         }
       }
 
@@ -38,11 +48,11 @@ export const preferenceScorer = (dogs: Choices, cats: Choices) => {
       for (let i = 0; i < dogsCatChoices.length; i++) {
         const dogsCatChoice = dogsCatChoices[i];
 
-        // const score = choicesA.length - i;
-        const catsChoices = cats[dogsCatChoice];
+        const dogsCatChoiceScore = dogsCatChoices.length - i;
+        // const catsChoices = cats[dogsCatChoice];
 
-        //If Match, Double Score, else, set to standard score
-        output[dog][dogsCatChoice] = catsChoices.includes(dog) ? 2 : 1;
+        //Add Score to Array
+        output[dog][dogsCatChoice] += dogsCatChoiceScore;
       }
     }
   }
