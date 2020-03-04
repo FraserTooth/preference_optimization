@@ -1,0 +1,13 @@
+{
+  "name": "preference_optimization",
+  "version": "0.0.1",
+  "description": "Given a top N list of preferences between lists A & B and X maximum matches, maximise...something.",
+  "main": "src/index.js",
+  "repository": "https://github.com/FraserTooth/preference_optimization.git",
+  "author": "Fraser Tooth <frasertooth@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.0"
+  }
+}
