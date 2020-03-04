@@ -1,6 +1,7 @@
 //Imports
-const { expect } = require("chai");
-const { preferenceScorer } = require("./index");
+import { preferenceScorer } from "../src/preferenceOptimization";
+import { expect } from "chai";
+import "mocha";
 
 describe("Preference Scoring", () => {
   it("Match 3 Clients and 3 Companies for Top Two Choices and Two Available Slots", () => {
