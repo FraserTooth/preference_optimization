@@ -18,7 +18,7 @@ describe("Preference Scoring", () => {
       }
     };
 
-    const output = preferenceScorer(input);
+    const output = preferenceScorer(input.companies, input.clients);
 
     const expected = {
       companyA: {
