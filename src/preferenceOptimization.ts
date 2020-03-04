@@ -1,10 +1,14 @@
 // Functions to Calculate Preference Scoring
 
 interface Choices {
-  clients: string;
-  companies: string;
+  [key: string]: string[];
 }
 
-export const preferenceScorer = (input: any) => {
+interface Groups {
+  clients: Choices;
+  companies: Choices;
+}
+
+export const preferenceScorer = (input: Groups) => {
   return true;
 };
