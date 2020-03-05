@@ -52,23 +52,32 @@ describe("Preference Scoring", () => {
 
 describe("Schedule Arrangement", () => {
   it("Given a Set of Scores, Return the Optimal Setting for 2 Maximum Possible Matches", () => {
-    const input = {
-      companyA: {
-        clientA: 4,
-        clientB: 1,
-        clientC: 1
+    const input = [
+      {
+        name: "companyA",
+        scores: [
+          { name: "clientA", score: 4 },
+          { name: "clientB", score: 1 },
+          { name: "clientC", score: 1 }
+        ]
       },
-      companyB: {
-        clientA: 3,
-        clientB: 3,
-        clientC: 0
+      {
+        name: "companyB",
+        scores: [
+          { name: "clientA", score: 3 },
+          { name: "clientB", score: 3 },
+          { name: "clientC", score: 0 }
+        ]
       },
-      companyC: {
-        clientA: 2,
-        clientB: 2,
-        clientC: 2
+      {
+        name: "companyC",
+        scores: [
+          { name: "clientA", score: 2 },
+          { name: "clientB", score: 2 },
+          { name: "clientC", score: 2 }
+        ]
       }
-    };
+    ];
 
     const meetings = 2;
 
