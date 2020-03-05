@@ -59,3 +59,5 @@ export const preferenceScorer = (dogs: Choices, cats: Choices) => {
 
   return output;
 };
+
+export const generateSchedule = (scores: Scores, meetings: number) => {};
