@@ -8,6 +8,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.2.10",
+    "@types/lodash": "^4.14.149",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.7.7",
     "chai": "^4.2.0",
@@ -15,7 +16,9 @@
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
   "scripts": {
     "test": "mocha -r ts-node/register tests/*.spec.ts"
   }

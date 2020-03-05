@@ -1,6 +1,7 @@
 // Functions to Calculate Preference Scoring
 
 // Yes the Use of Cats and Dogs is Silly, but its better than groupA and groupB
+import * as _ from "lodash";
 
 interface Choices {
   [chooser: string]: string[];
@@ -110,7 +111,7 @@ function shuffleArray(array: any[]) {
 export const generateSchedule = (
   scores: NewScores[],
   meetings: number,
-  numberOfShuffles = 10 as number
+  numberOfShuffles = 100 as number
 ) => {
   const listOfPossibleSchedules = [] as ScheduleOutputObject[];
 
@@ -120,25 +121,37 @@ export const generateSchedule = (
     listOfPossibleSchedules.push(round);
   }
 
-  //Return the one with the highest total matching score
+  //Return the one with the highest total matching score that has the most schedules
   const bestOutcome = listOfPossibleSchedules.reduce(
     (best: any, current: any) => {
-      const bestTotal = best
-        ? (Object.values(best.matching_score_totals).reduce(
-            (a: any, b: any) => a + b,
-            0
-          ) as number)
+      //Calculate Number of Meetings Scheduled
+      const meetingsScheduledBest = best
+        ? _.sum(
+            best.schedule.map((timeslot: any) => Object.keys(timeslot).length)
+          )
         : 0;
-      const currentTotal = Object.values(current.matching_score_totals).reduce(
-        (a: any, b: any) => a + b,
-        0
-      ) as number;
+
+      const meetingsScheduledCurrent = _.sum(
+        current.schedule.map((timeslot: any) => Object.keys(timeslot).length)
+      );
+
+      //Return if current has more meetings
+      if (meetingsScheduledCurrent > meetingsScheduledBest) {
+        return current;
+      } else if (meetingsScheduledCurrent < meetingsScheduledBest) {
+        return best;
+      }
+
+      const bestTotal = best
+        ? _.sum(Object.values(best.matching_score_totals))
+        : 0;
+      const currentTotal = _.sum(Object.values(current.matching_score_totals));
+
       return currentTotal > bestTotal ? current : best;
     },
     null
   );
 
-  console.log(bestOutcome);
   return bestOutcome;
 };
 
@@ -194,9 +207,6 @@ const generateOneRoundOfSchedules = (scores: NewScores[], meetings: number) => {
             break;
           }
         }
-      }
-      if (Object.keys(timeslot).length === Object.keys(scores).length) {
-        break;
       }
       //Shuffle Order of Dogs
       scores = shuffleArray(scores);
