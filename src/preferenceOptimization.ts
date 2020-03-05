@@ -82,6 +82,11 @@ interface NewScores {
   scores: NewMatches[];
 }
 
+interface ScheduleOutputObject {
+  schedule: Timeslot[];
+  matching_score_totals: ScoreTotals;
+}
+
 function shuffleArray(array: any[]) {
   let currentIndex = array.length as number;
   let temporaryValue;
@@ -102,11 +107,46 @@ function shuffleArray(array: any[]) {
   return array;
 }
 
-export const generateSchedule = (scores: NewScores[], meetings: number) => {
+export const generateSchedule = (
+  scores: NewScores[],
+  meetings: number,
+  numberOfShuffles = 10 as number
+) => {
+  const listOfPossibleSchedules = [] as ScheduleOutputObject[];
+
+  //Run the Generator X Times
+  for (let x = 0; x < numberOfShuffles; x++) {
+    const round = generateOneRoundOfSchedules(scores, meetings);
+    listOfPossibleSchedules.push(round);
+  }
+
+  //Return the one with the highest total matching score
+  const bestOutcome = listOfPossibleSchedules.reduce(
+    (best: any, current: any) => {
+      const bestTotal = best
+        ? (Object.values(best.matching_score_totals).reduce(
+            (a: any, b: any) => a + b,
+            0
+          ) as number)
+        : 0;
+      const currentTotal = Object.values(current.matching_score_totals).reduce(
+        (a: any, b: any) => a + b,
+        0
+      ) as number;
+      return currentTotal > bestTotal ? current : best;
+    },
+    null
+  );
+
+  console.log(bestOutcome);
+  return bestOutcome;
+};
+
+const generateOneRoundOfSchedules = (scores: NewScores[], meetings: number) => {
   const output = {
-    schedule: [] as Timeslot[],
-    matching_score_totals: {} as ScoreTotals
-  };
+    schedule: [],
+    matching_score_totals: {}
+  } as ScheduleOutputObject;
 
   //Initialise Dog and Cat Schedules and Score Totals
   const dogsTotalSchedule = {} as Schedule;
@@ -117,8 +157,8 @@ export const generateSchedule = (scores: NewScores[], meetings: number) => {
     const timeslot = {} as Timeslot;
     const chosenCatsThisTimeslot = [] as string[];
 
-    //While there isn't a solution
-    while (Object.keys(timeslot).length < Object.keys(scores).length) {
+    //While there isn't a solution, try 10 times
+    for (let n = 0; n < 10; n++) {
       // For Every Dog
       for (let i = 0; i < scores.length; i++) {
         const dog = scores[i];
@@ -154,6 +194,9 @@ export const generateSchedule = (scores: NewScores[], meetings: number) => {
             break;
           }
         }
+      }
+      if (Object.keys(timeslot).length === Object.keys(scores).length) {
+        break;
       }
       //Shuffle Order of Dogs
       scores = shuffleArray(scores);
