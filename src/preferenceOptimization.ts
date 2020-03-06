@@ -18,48 +18,47 @@ interface Scores {
 }
 
 export const preferenceScorer = (dogs: Choices, cats: Choices) => {
-  const output = {} as Scores;
+  const output = [] as Scores[];
 
   //For Every Dog
   for (const dog in dogs) {
     if (dogs.hasOwnProperty(dog)) {
       const dogsCatChoices = dogs[dog];
 
-      output[dog] = {} as Matches;
+      const dogObject = {
+        name: dog,
+        scores: [] as Matches[]
+      } as Scores;
 
-      //Represent All Cats in the Dog's Choices
+      //Represent All Cats
       for (const cat in cats) {
         if (cats.hasOwnProperty(cat)) {
           const catsChoices = cats[cat];
 
-          //Initialise Score
-          if (!output[dog][cat]) {
-            output[dog][cat] = 0;
-          }
+          const catScore = {
+            name: cat,
+            score: 0
+          } as Matches;
 
           const catsDogChoiceScore =
             catsChoices.indexOf(dog) != -1
               ? catsChoices.length - catsChoices.indexOf(dog)
               : 0;
 
+          const dogsCatChoiceScore =
+            dogsCatChoices.indexOf(cat) != -1
+              ? dogsCatChoices.length - dogsCatChoices.indexOf(cat)
+              : 0;
+
           //Add Standard Score for Cats with Current Dog or Set to Zero
-          output[dog][cat] += catsDogChoiceScore;
+          catScore.score += catsDogChoiceScore + dogsCatChoiceScore;
+
+          dogObject.scores.push(catScore);
         }
       }
-
-      //Check Dog's Choices
-      for (let i = 0; i < dogsCatChoices.length; i++) {
-        const dogsCatChoice = dogsCatChoices[i];
-
-        const dogsCatChoiceScore = dogsCatChoices.length - i;
-        // const catsChoices = cats[dogsCatChoice];
-
-        //Add Score to Array
-        output[dog][dogsCatChoice] += dogsCatChoiceScore;
-      }
+      output.push(dogObject);
     }
   }
-
   return output;
 };
 
