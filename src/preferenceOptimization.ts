@@ -8,11 +8,13 @@ interface Choices {
 }
 
 interface Matches {
-  [match: string]: number;
+  name: string;
+  score: number;
 }
 
 interface Scores {
-  [dog: string]: Matches;
+  name: string;
+  scores: Matches[];
 }
 
 export const preferenceScorer = (dogs: Choices, cats: Choices) => {
@@ -73,16 +75,6 @@ interface Schedule {
   [dog: string]: string[];
 }
 
-interface NewMatches {
-  name: string;
-  score: number;
-}
-
-interface NewScores {
-  name: string;
-  scores: NewMatches[];
-}
-
 interface ScheduleOutputObject {
   schedule: Timeslot[];
   matching_score_totals: ScoreTotals;
@@ -109,7 +101,7 @@ function shuffleArray(array: any[]) {
 }
 
 export const generateSchedule = (
-  scores: NewScores[],
+  scores: Scores[],
   meetings: number,
   numberOfShuffles = 100 as number
 ) => {
@@ -155,7 +147,7 @@ export const generateSchedule = (
   return bestOutcome;
 };
 
-const generateOneRoundOfSchedules = (scores: NewScores[], meetings: number) => {
+const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
   const output = {
     schedule: [],
     matching_score_totals: {}

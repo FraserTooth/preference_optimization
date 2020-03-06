@@ -28,23 +28,32 @@ describe("Preference Scoring", () => {
       For preference order match: (choices.length - 1)
       For two way match (preferenceOrderClient + prederenceOrderCompany)
     */
-    const expected = {
-      companyA: {
-        clientA: 4,
-        clientB: 1,
-        clientC: 1
+    const expected = [
+      {
+        name: "companyA",
+        scores: [
+          { name: "clientA", score: 4 },
+          { name: "clientB", score: 1 },
+          { name: "clientC", score: 1 }
+        ]
       },
-      companyB: {
-        clientA: 3,
-        clientB: 3,
-        clientC: 0
+      {
+        name: "companyB",
+        scores: [
+          { name: "clientA", score: 3 },
+          { name: "clientB", score: 3 },
+          { name: "clientC", score: 0 }
+        ]
       },
-      companyC: {
-        clientA: 2,
-        clientB: 2,
-        clientC: 2
+      {
+        name: "companyC",
+        scores: [
+          { name: "clientA", score: 2 },
+          { name: "clientB", score: 2 },
+          { name: "clientC", score: 2 }
+        ]
       }
-    };
+    ];
 
     expect(output).to.deep.equal(expected);
   });
