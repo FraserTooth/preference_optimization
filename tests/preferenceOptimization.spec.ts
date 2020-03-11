@@ -93,7 +93,9 @@ describe("Preference Scoring", () => {
 });
 
 describe("Schedule Arrangement", () => {
-  it("Given a Set of Scores, Return the Optimal Setting for 2 Maximum Possible Matches", () => {
+  let output = undefined as any;
+
+  before(() => {
     const input = [
       {
         name: "companyA",
@@ -123,8 +125,35 @@ describe("Schedule Arrangement", () => {
 
     const meetings = 2;
 
-    const output = generateSchedule(input, meetings);
+    output = generateSchedule(input, meetings);
+  });
 
+  /*
+      Companies must have a full schedule
+      Score must be maximised
+    */
+
+  // const example_expected = {
+  //   schedule: [
+  //     {
+  //       companyA: "clientA",
+  //       companyB: "clientB",
+  //       companyC: "clientC"
+  //     },
+  //     {
+  //       companyA: "clientC",
+  //       companyB: "clientA",
+  //       companyC: "clientB"
+  //     }
+  //   ],
+  //   matching_score_totals: {
+  //     companyA: 5,
+  //     companyB: 6,
+  //     companyC: 4
+  //   }
+  // };
+
+  it("Given a Set of Scores, Return the Optimal Setting for 2 Maximum Possible Matches", () => {
     const totalScore = Object.values(output.matching_score_totals).reduce(
       (tot: any, c: any) => {
         return tot + c;
@@ -132,36 +161,12 @@ describe("Schedule Arrangement", () => {
       0
     );
 
-    /*
-      Companies must have a full schedule
-      Score must be maximised
-    */
-
-    // const example_expected = {
-    //   schedule: [
-    //     {
-    //       companyA: "clientA",
-    //       companyB: "clientB",
-    //       companyC: "clientC"
-    //     },
-    //     {
-    //       companyA: "clientC",
-    //       companyB: "clientA",
-    //       companyC: "clientB"
-    //     }
-    //   ],
-    //   matching_score_totals: {
-    //     companyA: 5,
-    //     companyB: 6,
-    //     companyC: 4
-    //   }
-    // };
-
     expect(isScheduleFull(output.schedule)).to.be.true;
     expect(output.schedule.length).to.equal(2);
     expect(totalScore).to.equal(15);
+  });
 
-    //Specific Existence Checks
+  it("Check all Companies are in the Generated Schedule", () => {
     output.schedule.forEach((timeslot: any) => {
       expect(Object.keys(timeslot).sort()).to.deep.equal([
         "companyA",
@@ -169,14 +174,20 @@ describe("Schedule Arrangement", () => {
         "companyC"
       ]);
     });
+  });
 
+  it("Check all Scores are Sensible Numbers", () => {
     for (const company in output.matching_score_totals) {
       if (output.matching_score_totals.hasOwnProperty(company)) {
         const score = output.matching_score_totals[company];
         expect(score).to.be.a("number");
+        expect(score >= 0).to.be.true;
+        expect(score <= 99).to.be.true;
       }
     }
+  });
 
+  it("Check All Expected Companies Have a Total Score", () => {
     expect(Object.keys(output.matching_score_totals).sort()).to.deep.equal([
       "companyA",
       "companyB",
@@ -184,5 +195,5 @@ describe("Schedule Arrangement", () => {
     ]);
   });
 
-  it("Will Generate Schedules for Students");
+  it("Will Generate Schedules for Students", () => {});
 });
