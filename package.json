@@ -17,6 +17,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "deep-equal-in-any-order": "^1.0.24",
     "lodash": "^4.17.15"
   },
   "scripts": {

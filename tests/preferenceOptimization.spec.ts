@@ -6,6 +6,11 @@ import {
 import { expect } from "chai";
 import "mocha";
 
+const deepEqualInAnyOrder = require("deep-equal-in-any-order");
+const chai = require("chai");
+
+chai.use(deepEqualInAnyOrder);
+
 const isScheduleFull = (scheduleArray: any) => {
   let numberOfCompanies;
 
@@ -155,5 +160,29 @@ describe("Schedule Arrangement", () => {
     expect(isScheduleFull(output.schedule)).to.be.true;
     expect(output.schedule.length).to.equal(2);
     expect(totalScore).to.equal(15);
+
+    //Specific Existence Checks
+    output.schedule.forEach((timeslot: any) => {
+      expect(Object.keys(timeslot).sort()).to.deep.equal([
+        "companyA",
+        "companyB",
+        "companyC"
+      ]);
+    });
+
+    for (const company in output.matching_score_totals) {
+      if (output.matching_score_totals.hasOwnProperty(company)) {
+        const score = output.matching_score_totals[company];
+        expect(score).to.be.a("number");
+      }
+    }
+
+    expect(Object.keys(output.matching_score_totals).sort()).to.deep.equal([
+      "companyA",
+      "companyB",
+      "companyC"
+    ]);
   });
+
+  it("Will Generate Schedules for Students");
 });

@@ -102,7 +102,7 @@ function shuffleArray(array: any[]) {
 export const generateSchedule = (
   scores: Scores[],
   meetings: number,
-  numberOfShuffles = 10 as number
+  numberOfShuffles = 20 as number
 ) => {
   const listOfPossibleSchedules = [] as ScheduleOutputObject[];
 
