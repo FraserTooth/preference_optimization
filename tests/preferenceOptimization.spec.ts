@@ -94,6 +94,7 @@ describe("Preference Scoring", () => {
 
 describe("Schedule Arrangement", () => {
   let output = undefined as any;
+  const meetings = 2;
 
   before(() => {
     const input = [
@@ -123,8 +124,6 @@ describe("Schedule Arrangement", () => {
       }
     ];
 
-    const meetings = 2;
-
     output = generateSchedule(input, meetings);
   });
 
@@ -150,20 +149,21 @@ describe("Schedule Arrangement", () => {
   //     companyA: 5,
   //     companyB: 6,
   //     companyC: 4
+  //   },
+  //   student_schedules: {
+  //     clientA: ["companyA", "companyB"],
+  //     clientB: ["companyB", "companyC"],
+  //     clientC: ["companyC", "companyA"]
   //   }
   // };
 
-  it("Given a Set of Scores, Return the Optimal Setting for 2 Maximum Possible Matches", () => {
-    const totalScore = Object.values(output.matching_score_totals).reduce(
-      (tot: any, c: any) => {
-        return tot + c;
-      },
-      0
-    );
+  it("Has a Schedule of Correct Typings", () => {
+    expect(output.schedule !== undefined).to.be.true;
+    expect(output.schedule).to.be.a("array");
+  });
 
-    expect(isScheduleFull(output.schedule)).to.be.true;
-    expect(output.schedule.length).to.equal(2);
-    expect(totalScore).to.equal(15);
+  it("Has a Schedule of Correct Length", () => {
+    expect(output.schedule.length).to.equal(meetings);
   });
 
   it("Check all Companies are in the Generated Schedule", () => {
@@ -195,5 +195,22 @@ describe("Schedule Arrangement", () => {
     ]);
   });
 
-  it("Will Generate Schedules for Students", () => {});
+  it("Given a Set of Scores, Return the Optimal Setting for 2 Maximum Possible Matches", () => {
+    const totalScore = Object.values(output.matching_score_totals).reduce(
+      (tot: any, c: any) => {
+        return tot + c;
+      },
+      0
+    );
+
+    expect(isScheduleFull(output.schedule)).to.be.true;
+    expect(output.schedule.length).to.equal(2);
+    expect(totalScore).to.equal(15);
+  });
+
+  describe("Student Schedules", () => {
+    it("Will Generate Schedules for Students", () => {
+      expect(output.student_schedules !== undefined).to.be.true;
+    });
+  });
 });
