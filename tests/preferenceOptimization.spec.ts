@@ -150,7 +150,7 @@ describe("Schedule Arrangement", () => {
   //     companyB: 6,
   //     companyC: 4
   //   },
-  //   student_schedules: {
+  //   participant_schedules: {
   //     clientA: ["companyA", "companyB"],
   //     clientB: ["companyB", "companyC"],
   //     clientC: ["companyC", "companyA"]
@@ -208,9 +208,26 @@ describe("Schedule Arrangement", () => {
     expect(totalScore).to.equal(15);
   });
 
-  describe("Student Schedules", () => {
-    it("Will Generate Schedules for Students", () => {
-      expect(output.student_schedules !== undefined).to.be.true;
+  describe("Client Schedules", () => {
+    it("Will Generate Schedules for Client", () => {
+      expect(output.participant_schedules !== undefined).to.be.true;
+      expect(output.participant_schedules).to.be.an("object");
+    });
+
+    it("Will generate a schedule for all Clients", () => {
+      expect(Object.keys(output.participant_schedules).sort()).to.deep.equal([
+        "clientA",
+        "clientB",
+        "clientC"
+      ]);
+
+      for (const client in output.participant_schedules) {
+        if (output.participant_schedules.hasOwnProperty(client)) {
+          const schedule = output.participant_schedules[client];
+
+          expect(schedule).to.be.an("array");
+        }
+      }
     });
   });
 });
