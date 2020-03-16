@@ -154,6 +154,11 @@ describe("Schedule Arrangement", () => {
   //     clientA: ["companyA", "companyB"],
   //     clientB: ["companyB", "companyC"],
   //     clientC: ["companyC", "companyA"]
+  //   },
+  //   company_schedules: {
+  //     companyA: ["clientA", "clientC"],
+  //     companyB: ["clientB", "clientA"],
+  //     companyC: ["clientC", "clientB"]
   //   }
   // };
 
