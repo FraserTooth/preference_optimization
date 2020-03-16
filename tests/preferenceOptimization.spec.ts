@@ -155,7 +155,7 @@ describe("Schedule Arrangement", () => {
   //     clientB: ["companyB", "companyC"],
   //     clientC: ["companyC", "companyA"]
   //   },
-  //   company_schedules: {
+  //   facilitator_schedules: {
   //     companyA: ["clientA", "clientC"],
   //     companyB: ["clientB", "clientA"],
   //     companyC: ["clientC", "clientB"]
@@ -243,6 +243,41 @@ describe("Schedule Arrangement", () => {
           expect(schedule[1]).to.be.a("string");
           expect(schedule[1].length).to.equal(8);
           expect(schedule[1].substring(0, 7)).to.equal("company");
+        }
+      }
+    });
+  });
+
+  describe("Company Schedules", () => {
+    it("Will Generate Schedules for Company", () => {
+      expect(output.facilitator_schedules !== undefined).to.be.true;
+      expect(output.facilitator_schedules).to.be.an("object");
+    });
+
+    it("Will generate a schedule for all Companies", () => {
+      expect(Object.keys(output.facilitator_schedules).sort()).to.deep.equal([
+        "companyA",
+        "companyB",
+        "companyC"
+      ]);
+    });
+
+    it("Will Generate a valid schedule for all Companies", () => {
+      for (const company in output.facilitator_schedules) {
+        if (output.facilitator_schedules.hasOwnProperty(company)) {
+          const schedule = output.facilitator_schedules[company];
+
+          expect(schedule).to.be.an("array");
+
+          expect(schedule.length).to.equal(2);
+
+          expect(schedule[0]).to.be.a("string");
+          expect(schedule[0].length).to.equal(7);
+          expect(schedule[0].substring(0, 6)).to.equal("client");
+
+          expect(schedule[1]).to.be.a("string");
+          expect(schedule[1].length).to.equal(7);
+          expect(schedule[1].substring(0, 6)).to.equal("client");
         }
       }
     });
