@@ -229,3 +229,13 @@ export const generateSchedule = (
 
   return bestOutcome;
 };
+
+export const buildScheduleFromScores = (
+  dogs: Choices,
+  cats: Choices,
+  meetings: number
+) => {
+  const scores = preferenceScorer(dogs, cats);
+
+  return generateSchedule(scores, meetings);
+};

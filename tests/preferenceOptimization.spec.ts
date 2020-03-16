@@ -1,10 +1,12 @@
 //Imports
 import {
   preferenceScorer,
-  generateSchedule
+  generateSchedule,
+  buildScheduleFromScores
 } from "../src/preferenceOptimization";
 import { expect } from "chai";
 import "mocha";
+import { describe } from "mocha";
 
 const deepEqualInAnyOrder = require("deep-equal-in-any-order");
 const chai = require("chai");
@@ -281,5 +283,35 @@ describe("Schedule Arrangement", () => {
         }
       }
     });
+  });
+});
+
+describe("End-to-end Tests", () => {
+  it("Small End-to-end Test", () => {
+    const input = {
+      clients: {
+        clientA: ["companyA", "companyB"],
+        clientB: ["companyB", "companyC"],
+        clientC: ["companyC", "companyA"]
+      },
+      companies: {
+        companyA: ["clientA", "clientB"],
+        companyB: ["clientA", "clientB"],
+        companyC: ["clientA", "clientB"]
+      }
+    };
+
+    const output = buildScheduleFromScores(input.companies, input.clients, 2);
+
+    const totalScore = Object.values(output.matching_score_totals).reduce(
+      (tot: any, c: any) => {
+        return tot + c;
+      },
+      0
+    );
+
+    expect(isScheduleFull(output.schedule)).to.be.true;
+    expect(output.schedule.length).to.equal(2);
+    expect(totalScore).to.equal(15);
   });
 });
