@@ -220,12 +220,24 @@ describe("Schedule Arrangement", () => {
         "clientB",
         "clientC"
       ]);
+    });
 
+    it("Will Generate a valid schedule for all clients", () => {
       for (const client in output.participant_schedules) {
         if (output.participant_schedules.hasOwnProperty(client)) {
           const schedule = output.participant_schedules[client];
 
           expect(schedule).to.be.an("array");
+
+          expect(schedule.length).to.equal(2);
+
+          expect(schedule[0]).to.be.a("string");
+          expect(schedule[0].length).to.equal(7);
+          expect(schedule[0].substring(0, 6)).to.equal("client");
+
+          expect(schedule[1]).to.be.a("string");
+          expect(schedule[1].length).to.equal(7);
+          expect(schedule[1].substring(0, 6)).to.equal("client");
         }
       }
     });
