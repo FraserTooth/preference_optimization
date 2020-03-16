@@ -300,8 +300,13 @@ describe("End-to-end Tests", () => {
         companyC: ["clientA", "clientB"]
       }
     };
+    const meetings = 2;
 
-    const output = buildScheduleFromScores(input.companies, input.clients, 2);
+    const output = buildScheduleFromScores(
+      input.companies,
+      input.clients,
+      meetings
+    );
 
     const totalScore = Object.values(output.matching_score_totals).reduce(
       (tot: any, c: any) => {
@@ -311,7 +316,64 @@ describe("End-to-end Tests", () => {
     );
 
     expect(isScheduleFull(output.schedule)).to.be.true;
-    expect(output.schedule.length).to.equal(2);
+    expect(output.schedule.length).to.equal(meetings);
     expect(totalScore).to.equal(15);
+  });
+
+  it("Big End-to-end Test", () => {
+    const input = {
+      clients: {
+        fraser: ["moneytree", "zehitomo", "zaiko", "pivotal", "restar"],
+        eri: ["makeleaps", "zaiko", "restar", "mercari", "code chrysalis"],
+        yan: ["google", "restar", "makeleaps", "pivotal", "visual alpha"],
+        vic: ["visual alpha", "google", "zehitomo", "moneytree", "pivotal"],
+        steffie: ["code chrysalis", "restar", "google", "moneytree", "mercari"],
+        dustin: ["google", "mercari", "moneytree", "zehitomo", "restar"],
+        iku: ["pivotal", "restar", "code chrysalis", "zaiko", "moneytree"],
+        jill: ["code chrysalis", "pivotal", "google", "restar", "mercari"],
+        niklas: [
+          "makeleaps",
+          "google",
+          "code chrysalis",
+          "moneytree",
+          "restar"
+        ],
+        felix: ["mercari", "google", "zehitomo", "visual alpha", "pivotal"],
+        steve: ["google", "zehitomo", "restar", "mercari", "pivotal"],
+        yu: ["zehitomo", "mercari", "code chrysalis", "makeleaps", "moneytree"]
+      },
+      companies: {
+        moneytree: ["fraser", "vic", "dustin", "jill", "niklas"],
+        "code chrysalis": ["steffie", "vic", "dustin", "felix", "yan"],
+        "visual alpha": ["felix", "eri", "iku", "yan", "niklas"],
+        mercari: ["jill", "eri", "fraser", "yan", "steffie"],
+        zaiko: ["dustin", "steffie", "yan", "felix", "iku"],
+        google: ["eri", "yan", "niklas", "vic", "steffie"],
+        zehitomo: ["felix", "fraser", "jill", "iku", "vic"],
+        pivotal: ["iku", "dustin", "vic", "steffie", "yan"],
+        makeleaps: ["niklas", "felix", "iku", "eri", "fraser"],
+        restar: ["vic", "steffie", "felix", "yan", "fraser"]
+      }
+    };
+    const meetings = 8;
+
+    const output = buildScheduleFromScores(
+      input.companies,
+      input.clients,
+      meetings
+    );
+
+    const totalScore = Object.values(output.matching_score_totals).reduce(
+      (tot: any, c: any) => {
+        return tot + c;
+      },
+      0
+    );
+
+    console.log(output);
+
+    expect(isScheduleFull(output.schedule)).to.be.true;
+    expect(output.schedule.length).to.equal(meetings);
+    expect(totalScore).to.be.greaterThan(0);
   });
 });
