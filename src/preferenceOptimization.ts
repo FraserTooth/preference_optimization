@@ -79,7 +79,7 @@ interface ScheduleOutputObject {
   matching_score_totals: ScoreTotals;
 }
 
-interface ParticipantSchedules {
+interface ParticipantFacilitatorSchedules {
   [participant: string]: string[];
 }
 
@@ -191,7 +191,7 @@ export const generateSchedule = (
   const bestOutcome = findBestSchedule(listOfPossibleSchedules);
 
   //Add Cat Schedules
-  const cat_schedules = {} as ParticipantSchedules;
+  const cat_schedules = {} as ParticipantFacilitatorSchedules;
 
   const cats = scores[0].scores.map(score => score.name);
 
@@ -209,7 +209,23 @@ export const generateSchedule = (
     });
   });
 
+  //Add Dog Schedules
+  const dog_schedules = {} as ParticipantFacilitatorSchedules;
+
+  const dogs = Object.keys(bestOutcome.matching_score_totals);
+
+  dogs.forEach((dog: string) => {
+    dog_schedules[dog] = [] as string[];
+
+    bestOutcome.schedule.map((timeslot: Timeslot) => {
+      const meetingCat = timeslot[dog] ? timeslot[dog] : "";
+
+      dog_schedules[dog].push(meetingCat);
+    });
+  });
+
   bestOutcome.participant_schedules = cat_schedules;
+  bestOutcome.facilitator_schedules = dog_schedules;
 
   return bestOutcome;
 };
