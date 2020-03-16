@@ -128,25 +128,6 @@ const findBestSchedule = (listOfPossibleSchedules: ScheduleOutputObject[]) => {
   }, null);
 };
 
-export const generateSchedule = (
-  scores: Scores[],
-  meetings: number,
-  numberOfShuffles = 20 as number
-) => {
-  const listOfPossibleSchedules = [] as ScheduleOutputObject[];
-
-  //Run the Generator X Times
-  for (let x = 0; x < numberOfShuffles; x++) {
-    const round = generateOneRoundOfSchedules(scores, meetings);
-    listOfPossibleSchedules.push(round);
-  }
-
-  //Return the one with the highest total matching score that has the most schedules
-  const bestOutcome = findBestSchedule(listOfPossibleSchedules);
-
-  return bestOutcome;
-};
-
 const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
   const output = {
     schedule: [],
@@ -207,4 +188,23 @@ const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
     output.schedule.push(timeslot);
   }
   return output;
+};
+
+export const generateSchedule = (
+  scores: Scores[],
+  meetings: number,
+  numberOfShuffles = 20 as number
+) => {
+  const listOfPossibleSchedules = [] as ScheduleOutputObject[];
+
+  //Run the Generator X Times
+  for (let x = 0; x < numberOfShuffles; x++) {
+    const round = generateOneRoundOfSchedules(scores, meetings);
+    listOfPossibleSchedules.push(round);
+  }
+
+  //Return the one with the highest total matching score that has the most schedules
+  const bestOutcome = findBestSchedule(listOfPossibleSchedules);
+
+  return bestOutcome;
 };
