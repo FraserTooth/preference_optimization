@@ -79,6 +79,10 @@ interface ScheduleOutputObject {
   matching_score_totals: ScoreTotals;
 }
 
+interface ParticipantSchedules {
+  [participant: string]: string[];
+}
+
 function shuffleArray(array: any[]) {
   let currentIndex = array.length as number;
   let temporaryValue;
@@ -203,8 +207,29 @@ export const generateSchedule = (
     listOfPossibleSchedules.push(round);
   }
 
-  //Return the one with the highest total matching score that has the most schedules
+  //Find the one with the highest total matching score that has the most schedules
   const bestOutcome = findBestSchedule(listOfPossibleSchedules);
+
+  //Add Cat Schedules
+  const cat_schedules = {} as ParticipantSchedules;
+
+  const cats = scores[0].scores.map(score => score.name);
+
+  const flippedSchedule = bestOutcome.schedule.map((timeslot: Timeslot) => {
+    return _.invert(timeslot);
+  });
+
+  cats.forEach((cat: string) => {
+    cat_schedules[cat] = [] as string[];
+
+    flippedSchedule.forEach((timeslot: Timeslot) => {
+      const meetingDog = timeslot[cat] ? timeslot[cat] : "";
+
+      cat_schedules[cat].push(meetingDog);
+    });
+  });
+
+  bestOutcome.participant_schedules = cat_schedules;
 
   return bestOutcome;
 };

@@ -232,12 +232,12 @@ describe("Schedule Arrangement", () => {
           expect(schedule.length).to.equal(2);
 
           expect(schedule[0]).to.be.a("string");
-          expect(schedule[0].length).to.equal(7);
-          expect(schedule[0].substring(0, 6)).to.equal("client");
+          expect(schedule[0].length).to.equal(8);
+          expect(schedule[0].substring(0, 7)).to.equal("company");
 
           expect(schedule[1]).to.be.a("string");
-          expect(schedule[1].length).to.equal(7);
-          expect(schedule[1].substring(0, 6)).to.equal("client");
+          expect(schedule[1].length).to.equal(8);
+          expect(schedule[1].substring(0, 7)).to.equal("company");
         }
       }
     });
