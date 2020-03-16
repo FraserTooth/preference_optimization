@@ -99,6 +99,35 @@ function shuffleArray(array: any[]) {
   return array;
 }
 
+const findBestSchedule = (listOfPossibleSchedules: ScheduleOutputObject[]) => {
+  return listOfPossibleSchedules.reduce((best: any, current: any) => {
+    //Calculate Number of Meetings Scheduled
+    const meetingsScheduledBest = best
+      ? _.sum(
+          best.schedule.map((timeslot: any) => Object.keys(timeslot).length)
+        )
+      : 0;
+
+    const meetingsScheduledCurrent = _.sum(
+      current.schedule.map((timeslot: any) => Object.keys(timeslot).length)
+    );
+
+    //Return if current has more meetings
+    if (meetingsScheduledCurrent > meetingsScheduledBest) {
+      return current;
+    } else if (meetingsScheduledCurrent < meetingsScheduledBest) {
+      return best;
+    }
+
+    const bestTotal = best
+      ? _.sum(Object.values(best.matching_score_totals))
+      : 0;
+    const currentTotal = _.sum(Object.values(current.matching_score_totals));
+
+    return currentTotal > bestTotal ? current : best;
+  }, null);
+};
+
 export const generateSchedule = (
   scores: Scores[],
   meetings: number,
@@ -113,35 +142,7 @@ export const generateSchedule = (
   }
 
   //Return the one with the highest total matching score that has the most schedules
-  const bestOutcome = listOfPossibleSchedules.reduce(
-    (best: any, current: any) => {
-      //Calculate Number of Meetings Scheduled
-      const meetingsScheduledBest = best
-        ? _.sum(
-            best.schedule.map((timeslot: any) => Object.keys(timeslot).length)
-          )
-        : 0;
-
-      const meetingsScheduledCurrent = _.sum(
-        current.schedule.map((timeslot: any) => Object.keys(timeslot).length)
-      );
-
-      //Return if current has more meetings
-      if (meetingsScheduledCurrent > meetingsScheduledBest) {
-        return current;
-      } else if (meetingsScheduledCurrent < meetingsScheduledBest) {
-        return best;
-      }
-
-      const bestTotal = best
-        ? _.sum(Object.values(best.matching_score_totals))
-        : 0;
-      const currentTotal = _.sum(Object.values(current.matching_score_totals));
-
-      return currentTotal > bestTotal ? current : best;
-    },
-    null
-  );
+  const bestOutcome = findBestSchedule(listOfPossibleSchedules);
 
   return bestOutcome;
 };
