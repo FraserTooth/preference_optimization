@@ -148,9 +148,16 @@ describe("Schedule Arrangement", () => {
   //     }
   //   ],
   //   matching_score_totals: {
-  //     companyA: 5,
-  //     companyB: 6,
-  //     companyC: 4
+  //     facilitators: {
+  //       companyA: 5,
+  //       companyB: 6,
+  //       companyC: 4,
+  //     },
+  //     participants: {
+  //       clientA: 9,
+  //       clientB: 9,
+  //       clientC: 9
+  //     }
   //   },
   //   participant_schedules: {
   //     clientA: ["companyA", "companyB"],
@@ -195,20 +202,23 @@ describe("Schedule Arrangement", () => {
   });
 
   it("Check All Expected Companies Have a Total Score", () => {
-    expect(Object.keys(output.matching_score_totals).sort()).to.deep.equal([
-      "companyA",
-      "companyB",
-      "companyC"
-    ]);
+    expect(
+      Object.keys(output.matching_score_totals.facilitators).sort()
+    ).to.deep.equal(["companyA", "companyB", "companyC"]);
+  });
+
+  it("Check All Expected Clients Have a Total Score", () => {
+    expect(
+      Object.keys(output.matching_score_totals.participants).sort()
+    ).to.deep.equal(["clientA", "clientB", "clientC"]);
   });
 
   it("Given a Set of Scores, Return the Optimal Setting for 2 Maximum Possible Matches", () => {
-    const totalScore = Object.values(output.matching_score_totals).reduce(
-      (tot: any, c: any) => {
-        return tot + c;
-      },
-      0
-    );
+    const totalScore = Object.values(
+      output.matching_score_totals.facilitators
+    ).reduce((tot: any, c: any) => {
+      return tot + c;
+    }, 0);
 
     expect(isScheduleFull(output.schedule)).to.be.true;
     expect(output.schedule.length).to.equal(2);
@@ -285,6 +295,13 @@ describe("Schedule Arrangement", () => {
     });
   });
 });
+
+const fairnessTest = (result: any) => {
+  //Score should have a small standard deviation
+  //Companies should have a full schedule
+  //No client scores should be vastly higher than others
+  return result;
+};
 
 describe("End-to-end Tests", () => {
   it("Small End-to-end Test", () => {
@@ -369,8 +386,6 @@ describe("End-to-end Tests", () => {
       },
       0
     );
-
-    console.log(output);
 
     expect(isScheduleFull(output.schedule)).to.be.true;
     expect(output.schedule.length).to.equal(meetings);
