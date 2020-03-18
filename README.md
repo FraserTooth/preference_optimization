@@ -2,6 +2,11 @@
 
 Given a top N list of preferences between lists A &amp; B and X maximum matches, maximise...something.
 
+## Download
+
+This is a typescript package.
+Check out this package on [npmjs.com](https://www.npmjs.com/package/preference_optimization)
+
 ## Explanation of Problem
 
 This problem came about when I was involved in a 'Speed Dating-esque' recruiting event.

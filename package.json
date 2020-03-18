@@ -1,8 +1,9 @@
 {
   "name": "preference_optimization",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Given a top N list of preferences between lists A & B and X maximum matches, maximise...something.",
-  "main": "src/index.js",
+  "main": "dist/src/preferenceOptimisation.js",
+  "types": "dist/src/preferenceOptimisation.d.ts",
   "repository": "https://github.com/FraserTooth/preference_optimization.git",
   "author": "Fraser Tooth <frasertooth@gmail.com>",
   "license": "MIT",
@@ -21,6 +22,8 @@
     "lodash": "^4.17.15"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register tests/*.spec.ts"
+    "test": "mocha -r ts-node/register tests/*.spec.ts",
+    "prepublish": "tsc",
+    "build": "tsc"
   }
 }
