@@ -329,16 +329,21 @@ describe("End-to-end Tests", () => {
       meetings
     );
 
-    const totalScore = Object.values(output.matching_score_totals).reduce(
-      (tot: any, c: any) => {
-        return tot + c;
-      },
-      0
-    );
+    const totalScoreCompanies = Object.values(
+      output.matching_score_totals.facilitators
+    ).reduce((tot: any, c: any) => {
+      return tot + c;
+    }, 0);
+
+    const totalScoreStudents = Object.values(
+      output.matching_score_totals.facilitators
+    ).reduce((tot: any, c: any) => {
+      return tot + c;
+    }, 0);
 
     expect(isScheduleFull(output.schedule)).to.be.true;
     expect(output.schedule.length).to.equal(meetings);
-    expect(totalScore).to.equal(15);
+    expect(totalScoreCompanies).to.equal(15);
   });
 
   it("Big End-to-end Test", () => {
@@ -384,15 +389,21 @@ describe("End-to-end Tests", () => {
       meetings
     );
 
-    const totalScore = Object.values(output.matching_score_totals).reduce(
-      (tot: any, c: any) => {
-        return tot + c;
-      },
-      0
-    );
+    const totalScoreCompanies = Object.values(
+      output.matching_score_totals.facilitators
+    ).reduce((tot: any, c: any) => {
+      return tot + c;
+    }, 0);
+
+    const totalScoreStudents = Object.values(
+      output.matching_score_totals.facilitators
+    ).reduce((tot: any, c: any) => {
+      return tot + c;
+    }, 0);
 
     expect(isScheduleFull(output.schedule)).to.be.true;
     expect(output.schedule.length).to.equal(meetings);
-    expect(totalScore).to.be.greaterThan(0);
+    expect(totalScoreCompanies).to.be.greaterThan(0);
+    expect(totalScoreStudents).to.be.greaterThan(0);
   });
 });
