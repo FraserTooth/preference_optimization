@@ -4,8 +4,62 @@ Given a top N list of preferences between lists A &amp; B and X maximum matches,
 
 ## Download
 
-This is a typescript package.
+This is a typescript package, but should be interoperable with Javascript.
 Check out this package on [npmjs.com](https://www.npmjs.com/package/preference_optimization)
+
+## Example of Use
+
+```javascript
+const input = {
+  clients: {
+    clientA: ["companyA", "companyB"],
+    clientB: ["companyB", "companyC"],
+    clientC: ["companyC", "companyA"]
+  },
+  companies: {
+    companyA: ["clientA", "clientB"],
+    companyB: ["clientA", "clientB"],
+    companyC: ["clientA", "clientB"]
+  }
+};
+
+const meetings = 2;
+
+const output = buildScheduleFromScores(
+  input.companies,
+  input.clients,
+  meetings
+);
+
+const outputExpectedToBeSimilarTo = {
+  schedule: [
+    { companyA: "clientA", companyB: "clientB", companyC: "clientC" },
+    { companyB: "clientA", companyC: "clientB", companyA: "clientC" }
+  ],
+  matching_score_totals: {
+    facilitators: { companyA: 5, companyB: 6, companyC: 4 },
+    participants: { clientA: 7, clientB: 5, clientC: 3 }
+  },
+  participant_schedules: {
+    clientA: ["companyA", "companyB"],
+    clientB: ["companyB", "companyC"],
+    clientC: ["companyC", "companyA"]
+  },
+  facilitator_schedules: {
+    companyA: ["clientA", "clientC"],
+    companyB: ["clientB", "clientA"],
+    companyC: ["clientC", "clientB"]
+  }
+};
+```
+
+### "Expected to Be Similar To"? That Looks Like an Impure Function!!!
+
+Yes, this library uses a MonteCarlo shuffling system to decide which matches get priority ("first dibs") with each schedule timeslot that gets filled with matches.
+
+### So what does it optimise for? And How?
+
+See below for 'what' the optimisation process seeks to find, but specifically, the algorithm generates 20 random outcomes and picks the best one.
 
 ## Explanation of Problem
 
@@ -32,7 +86,7 @@ I intend for the outside of the function to not show this, but internally the te
 
 I used these terms because they're shorter, more fun and a little less hard to read than `Companies` and `Job-seekers` or `Clients` 😹
 
-## Running Locally
+## Running Tests Locally
 
 Install Dependancies with `yarn`
 Run Tests with `yarn test`
