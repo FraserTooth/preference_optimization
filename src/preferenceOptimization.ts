@@ -67,7 +67,12 @@ interface Timeslot {
 }
 
 interface ScoreTotals {
-  [dog: string]: number;
+  facilitators: DogOrCatScoreTotals;
+  participants: DogOrCatScoreTotals;
+}
+
+interface DogOrCatScoreTotals {
+  [dogOrCat: string]: number;
 }
 
 interface Schedule {
@@ -115,7 +120,10 @@ const findBestSchedule = (listOfPossibleSchedules: ScheduleOutputObject[]) => {
 const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
   const output = {
     schedule: [],
-    matching_score_totals: {}
+    matching_score_totals: {
+      facilitators: {},
+      participants: {}
+    }
   } as ScheduleOutputObject;
 
   //Initialise Dog and Cat Schedules and Score Totals
@@ -139,8 +147,8 @@ const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
         }
 
         //Intialise Dogs Total Score if it doesn't already exist
-        if (!output.matching_score_totals[dog.name]) {
-          output.matching_score_totals[dog.name] = 0;
+        if (!output.matching_score_totals.facilitators[dog.name]) {
+          output.matching_score_totals.facilitators[dog.name] = 0;
         }
 
         //Get Values and Sort Array in Order of Score
@@ -160,7 +168,7 @@ const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
             timeslot[dog.name] = cat.name;
             chosenCatsThisTimeslot.push(cat.name);
             dogsTotalSchedule[dog.name].push(cat.name);
-            output.matching_score_totals[dog.name] += cat.score;
+            output.matching_score_totals.facilitators[dog.name] += cat.score;
             break;
           }
         }
@@ -212,7 +220,7 @@ export const generateSchedule = (
   //Add Dog Schedules
   const dog_schedules = {} as ParticipantFacilitatorSchedules;
 
-  const dogs = Object.keys(bestOutcome.matching_score_totals);
+  const dogs = Object.keys(bestOutcome.matching_score_totals.facilitators);
 
   dogs.forEach((dog: string) => {
     dog_schedules[dog] = [] as string[];

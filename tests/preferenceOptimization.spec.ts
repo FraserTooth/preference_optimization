@@ -127,6 +127,8 @@ describe("Schedule Arrangement", () => {
     ];
 
     output = generateSchedule(input, meetings);
+
+    console.log(output);
   });
 
   /*
@@ -191,9 +193,10 @@ describe("Schedule Arrangement", () => {
   });
 
   it("Check all Scores are Sensible Numbers", () => {
-    for (const company in output.matching_score_totals) {
-      if (output.matching_score_totals.hasOwnProperty(company)) {
-        const score = output.matching_score_totals[company];
+    const companyScores = output.matching_score_totals.facilitators;
+    for (const company in companyScores) {
+      if (companyScores.hasOwnProperty(company)) {
+        const score = companyScores[company];
         expect(score).to.be.a("number");
         expect(score >= 0).to.be.true;
         expect(score <= 99).to.be.true;
@@ -296,8 +299,9 @@ describe("Schedule Arrangement", () => {
   });
 });
 
-const fairnessTest = (result: any) => {
+const runFairnessTests = (result: any) => {
   //Score should have a small standard deviation
+
   //Companies should have a full schedule
   //No client scores should be vastly higher than others
   return result;
