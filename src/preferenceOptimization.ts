@@ -109,9 +109,11 @@ const findBestSchedule = (listOfPossibleSchedules: ScheduleOutputObject[]) => {
     }
 
     const bestTotal = best
-      ? _.sum(Object.values(best.matching_score_totals))
+      ? _.sum(Object.values(best.matching_score_totals.facilitators))
       : 0;
-    const currentTotal = _.sum(Object.values(current.matching_score_totals));
+    const currentTotal = _.sum(
+      Object.values(current.matching_score_totals.facilitators)
+    );
 
     return currentTotal > bestTotal ? current : best;
   }, null);
@@ -159,6 +161,11 @@ const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
         for (let j = 0; j < catScoresArray.length; j++) {
           const cat = catScoresArray[j];
 
+          //Intialise Dogs Total Score if it doesn't already exist
+          if (!output.matching_score_totals.participants[cat.name]) {
+            output.matching_score_totals.participants[cat.name] = 0;
+          }
+
           //Find Best Cat that Hasn't Already Been Matched with this dog and hasnt been matched with anyone else this round
           if (
             !dogsTotalSchedule[dog.name].includes(cat.name) &&
@@ -169,6 +176,7 @@ const generateOneRoundOfSchedules = (scores: Scores[], meetings: number) => {
             chosenCatsThisTimeslot.push(cat.name);
             dogsTotalSchedule[dog.name].push(cat.name);
             output.matching_score_totals.facilitators[dog.name] += cat.score;
+            output.matching_score_totals.participants[cat.name] += cat.score;
             break;
           }
         }
